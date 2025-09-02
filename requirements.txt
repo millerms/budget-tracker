@@ -2,6 +2,7 @@ streamlit
 pandas
 sqlalchemy
 pydantic
+pydantic-settings
 python-dotenv
 plotly
 fastapi

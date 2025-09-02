@@ -14,6 +14,7 @@ dependencies = [
     "pandas",
     "sqlalchemy",
     "pydantic",
+    "pydantic-settings",
     "python-dotenv",
     "plotly",
     "fastapi",
@@ -22,20 +23,22 @@ dependencies = [
     "cryptography",
 ]
 
-optional-dependencies = {
-    "dev": [
-        "pytest",
-        "pytest-cov",
-        "ruff",
-        "black",
-        "pre-commit",
-        "mypy",
-    ],
-}
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "black",
+    "pre-commit",
+    "mypy",
+]
 
 [tool.ruff]
 line-length = 88
 target-version = "py311"
+exclude = ["__pycache__", ".venv"]
+
+[tool.ruff.lint]
 select = [
     "E",   # pycodestyle errors
     "W",   # pycodestyle warnings
@@ -47,18 +50,19 @@ select = [
     "C4",  # flake8-comprehensions
     "T10", # flake8-debugger
 ]
-exclude = ["__pycache__", ".venv"]
 
 [tool.black]
 line-length = 88
 target-version = ["py311"]
 
 [tool.mypy]
-ignore-missing-imports = true
+ignore_missing_imports = true
 strict = true
+disallow_any_decorated = false
+disallow_subclassing_any = false
 
 [tool.pytest.ini_options]
-addopts = "-v --cov=src"
+addopts = "-v"
 testpaths = ["tests"]
 python_files = "test_*.py"
 python_classes = "Test*"

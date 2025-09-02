@@ -6,7 +6,7 @@ Add file cards here as files are created or modified. For example:
 
 ### 📌 src/budget_tracker/config.py
 ⚙️ Inputs: Environment variables from .env
-💡 Key Logic: Uses Pydantic to validate and provide typed config; derives Fernet key for Plaid token encryption
+💡 Key Logic: Uses Pydantic to validate and provide typed config; derives Fernet key for Plaid token encryption using `APP_SECRET_KEY` and raw KDF salt `APP_KDF_SALT`
 🧪 Testing ideas: Test missing env variables raise errors, test key derivation deterministic
 
 ### 📌 src/budget_tracker/db.py
@@ -50,3 +50,23 @@ Add file cards here as files are created or modified. For example:
 🧪 Testing: Unit tests for date parsing, formatting consistency
 
 (Add more as files are created)
+
+### 📌 src/budget_tracker/app/home.py
+⚙️ Inputs: None (runs in Streamlit)
+💡 Key Logic: Minimal home page with title and button to open Add Transaction
+🧪 Testing ideas: Import without running Streamlit; ensure `main()` exists
+
+### 📌 tests/test_app_home.py
+⚙️ Inputs: Python import of `budget_tracker.app.home`
+💡 Key Logic: Smoke test confirms `main` is present and callable
+🧪 Testing ideas: Later, test navigation once multi-page is introduced
+
+### 📌 src/budget_tracker/api/main.py
+⚙️ Inputs: JSON payloads for Plaid routes
+💡 Key Logic: FastAPI app with stubbed Plaid endpoints (`create_link_token`, `exchange`, `sync`, `webhook`) to ensure secrets stay server-side
+🧪 Testing ideas: Route existence, response models, basic shape/keys
+
+### 📌 tests/test_api_plaid_routes.py
+⚙️ Inputs: TestClient HTTP calls to API
+💡 Key Logic: Smoke tests asserting 200 responses and expected keys in JSON
+🧪 Testing ideas: Add negative tests (bad payloads), auth when added
