@@ -51,6 +51,11 @@ Add file cards here as files are created or modified. For example:
 
 (Add more as files are created)
 
+### 📌 Makefile
+⚙️ Inputs: Local shell environment, optional `PORT`
+💡 Key Logic: Developer convenience targets — `setup`, `api`, `ui`, `lint`, `format`, `typecheck`, `test`, `precommit`
+🧪 Testing ideas: Run `make lint` and `make test` in CI; verify `api` runs with `PORT`
+
 ### 📌 src/budget_tracker/app/home.py
 ⚙️ Inputs: None (runs in Streamlit)
 💡 Key Logic: Minimal home page with title and button to open Add Transaction
