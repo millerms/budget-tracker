@@ -82,6 +82,7 @@ To avoid exposing secrets in the browser:
 - dotenv for sensitive config values
 - Sandbox/dev environments for testing
 
+
 ## Scaling Considerations
 
 - Start with SQLite for simplicity
@@ -89,7 +90,58 @@ To avoid exposing secrets in the browser:
 - Cache with Redis for analytics if performance becomes an issue
 - FastAPI auto-scales with Uvicorn workers
 
-## House Style
+## Deployment & Hosting (End State)
+
+**Goal:** A zero-install experience for you and a friend, with secure Plaid handling and minimal ops.
+
+**UI (Streamlit Community Cloud)**
+- Host the Streamlit UI on Streamlit Community Cloud for a public HTTPS URL like `https://your-app.streamlit.app`.
+- Store UI-side secrets (non-Plaid) in Streamlit **Secrets Manager** and access via `st.secrets[...]`.
+- Configure the UI to call the backend at `API_BASE_URL` (set in Secrets), e.g., `https://bt-backend.onrender.com`.
+
+**Backend (FastAPI + Postgres on Render/Fly/Railway)**
+- Host the FastAPI app separately (Render free tier is fine), exposing:
+  - `POST /plaid/create_link_token`
+  - `POST /plaid/exchange`
+  - `POST /plaid/sync`
+  - `POST /plaid/webhook`
+  - `GET  /health`
+- Environment variables managed in provider dashboard:
+  - `PLAID_CLIENT_ID`, `PLAID_SECRET`, `PLAID_ENV`
+  - `APP_SECRET_KEY` (used to derive Fernet key)
+  - `DATABASE_URL` (Postgres)
+- Optional: custom domain `api.yourdomain.com` with HTTPS.
+
+**Database**
+- Start with **Postgres (free tier)** for shared, persistent storage.
+- One schema, single-role credentials stored as backend env vars.
+
+**Security & Networking**
+- Add CORS middleware in FastAPI to allow only the Streamlit Cloud origin:
+  - `https://*.streamlit.app` or your exact app URL.
+- Do **not** expose Plaid secrets to Streamlit. All Plaid calls remain server-side.
+- Webhooks: Configure Plaid to call `https://bt-backend.onrender.com/plaid/webhook`.
+- Rate limit sensitive endpoints or add a simple bearer token for `/plaid/sync` in dev.
+
+**Secrets Management**
+- UI: Streamlit Secrets Manager (`API_BASE_URL`, optional UI password, analytics keys).
+- Backend: Provider env vars (`PLAID_*`, `APP_SECRET_KEY`, `DATABASE_URL`).
+
+**Deploy Flow**
+1. Push to `main` on GitHub.
+2. Render auto-deploys FastAPI (health check must pass).
+3. Streamlit Cloud auto-rebuilds the UI on new commits.
+4. Manual smoke test: open UI → check `/health` via the UI status panel.
+
+**Observability**
+- Enable provider logs for both services.
+- Add basic structured logs on sync (`added/updated/skipped/deleted` counts) and webhook events.
+
+**Future scale knobs (if needed)**
+- Migrate to Dockerized services and run both UI and API on a single platform (Render/Fly), or move to a small VPS.
+- Add a lightweight auth layer (magic link or password) and per-user data partitioning.
+- Introduce a job runner or cron for scheduled syncs if webhooks are insufficient.
+
 
 - Type hints and Google-style docstrings
 - Modular functions (<50 LOC)
