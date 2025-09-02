@@ -14,6 +14,31 @@ A personal budget tracker app built with Streamlit, FastAPI, and Plaid integrati
 
 *Dashboard screenshot coming soon*
 
+## Quickstart (Updated)
+
+1. Prerequisites: Python 3.11+
+2. Create venv: `python3.11 -m venv .venv && source .venv/bin/activate`
+3. Install deps: `python -m pip install -r requirements.txt -r requirements-dev.txt`
+4. Configure env: `cp -n .env.example .env` then set `APP_SECRET_KEY` and `APP_KDF_SALT`
+5. Start API:
+   - `export PYTHONPATH="$PWD/src"`
+   - `python -m uvicorn budget_tracker.api.main:app --reload --port 8000`
+6. Start UI:
+   - `export PYTHONPATH="$PWD/src"`
+   - `python -m streamlit run src/budget_tracker/app/home.py`
+
+Open UI at http://localhost:8501 and API docs at http://localhost:8000/docs
+
+### Makefile shortcuts
+- `make setup` (deps + pre-commit)  •  `make api`  •  `make ui`
+- `make lint`  •  `make format`  •  `make typecheck`  •  `make test`
+
+### Troubleshooting
+- Uvicorn target must include `:app` (module:attribute)
+- Set `PYTHONPATH="$PWD/src"` for src-layout imports
+- Ensure venv Python is 3.11 and `pydantic-settings` is installed
+- Encryption errors: set `APP_SECRET_KEY` and `APP_KDF_SALT` in `.env`
+
 ## Quickstart
 
 1. **Prerequisites**: Python 3.11+

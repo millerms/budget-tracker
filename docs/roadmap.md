@@ -94,3 +94,15 @@ See CONTRIBUTING.md for development workflows and coding standards.
 
 - 09/01/2025: Confirmed Plaid integration in MVP for secure imports
 - 09/01/2025: Chose Plotly over Altair for wider ecosystem support
+
+## Next Increment (Pick-up Notes)
+
+- Scope: Add Plaid crypto helpers and wire `/plaid/exchange` to return an encrypted placeholder token.
+- Files (≤3, <150 LOC):
+  - `src/budget_tracker/plaid/crypto.py` (encrypt/decrypt using `get_fernet_key`)
+  - `tests/test_plaid_crypto.py` (round-trip + key derivation)
+  - Update `src/budget_tracker/api/main.py` to use crypto helper in exchange stub
+- Acceptance:
+  - Tests pass locally (`make test`)
+  - mypy/ruff clean (`make typecheck`, `make lint`)
+  - No secrets in source; uses `.env`.
