@@ -1,11 +1,8 @@
-"""
-Budget Tracker
-
-A personal finance management app with secure Plaid integration.
-"""
-
-from .config import config
+"""Budget Tracker package."""
 
 __version__ = "0.1.0"
 
-__all__ = ["config", "__version__"]
+# Avoid importing settings at package import time to prevent runtime
+# dependencies (like pydantic-settings) from being required in tests
+# that only need submodules.
+__all__ = ["__version__"]

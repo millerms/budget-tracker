@@ -1,6 +1,5 @@
 """Configuration settings for the Budget Tracker app."""
 
-
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -22,8 +21,9 @@ class Config(BaseSettings):
 
     app_env: str = "dev"
 
-    app_secret_key: str = "3f54726e88bc4e15d174d44c3742e2223e3cb345cb9a60660fa6a124f5a80c20eme"  # required for encryption
-    app_kdf_salt: str = "3ca152c0e14d79351722c9412bcb61feb9df7b492bfdef2e8f590175084530d1"  # raw KDF salt bytes source
+    # Do NOT hardcode real secrets in source; set via .env
+    app_secret_key: str = "changeme"  # required for encryption
+    app_kdf_salt: str = "dev_salt_change_me"  # raw KDF salt bytes source
 
     # Holder for runtime Fernet instance; set after instantiation
     fernet: Fernet | None = None

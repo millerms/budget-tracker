@@ -4,14 +4,13 @@
 def test_home_import() -> None:
     try:
         # If package is installed
-        from budget_tracker.app import home  # type: ignore
+        from budget_tracker.app import home
     except ModuleNotFoundError:
         # Fallback for src layout
         import os
         import sys
 
         sys.path.insert(0, os.path.abspath("src"))
-        from budget_tracker.app import home  # type: ignore
+        from budget_tracker.app import home
 
     assert hasattr(home, "main") and callable(home.main)
-
