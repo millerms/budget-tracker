@@ -1,0 +1,10 @@
+streamlit
+pandas
+sqlalchemy
+pydantic
+python-dotenv
+plotly
+fastapi
+uvicorn[standard]
+httpx
+cryptography

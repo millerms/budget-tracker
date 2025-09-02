@@ -1,0 +1,65 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "budget-tracker"
+version = "0.1.0"
+description = "A personal budget tracker app with Plaid integration"
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.11"
+dependencies = [
+    "streamlit",
+    "pandas",
+    "sqlalchemy",
+    "pydantic",
+    "python-dotenv",
+    "plotly",
+    "fastapi",
+    "uvicorn[standard]",
+    "httpx",
+    "cryptography",
+]
+
+optional-dependencies = {
+    "dev": [
+        "pytest",
+        "pytest-cov",
+        "ruff",
+        "black",
+        "pre-commit",
+        "mypy",
+    ],
+}
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "T10", # flake8-debugger
+]
+exclude = ["__pycache__", ".venv"]
+
+[tool.black]
+line-length = 88
+target-version = ["py311"]
+
+[tool.mypy]
+ignore-missing-imports = true
+strict = true
+
+[tool.pytest.ini_options]
+addopts = "-v --cov=src"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
