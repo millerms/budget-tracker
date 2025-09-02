@@ -14,18 +14,16 @@ A personal budget tracker app built with Streamlit, FastAPI, and Plaid integrati
 
 *Dashboard screenshot coming soon*
 
-## Quickstart (Updated)
+## Quickstart
 
 1. Prerequisites: Python 3.11+
 2. Create venv: `python3.11 -m venv .venv && source .venv/bin/activate`
 3. Install deps: `python -m pip install -r requirements.txt -r requirements-dev.txt`
 4. Configure env: `cp -n .env.example .env` then set `APP_SECRET_KEY` and `APP_KDF_SALT`
 5. Start API:
-   - `export PYTHONPATH="$PWD/src"`
-   - `python -m uvicorn budget_tracker.api.main:app --reload --port 8000`
-6. Start UI:
-   - `export PYTHONPATH="$PWD/src"`
-   - `python -m streamlit run src/budget_tracker/app/home.py`
+   - `uvicorn budget_tracker.api.main:app --reload --port 8000`
+6. Start UI (in second terminal):
+   - `streamlit run src/budget_tracker/app/home.py`
 
 Open UI at http://localhost:8501 and API docs at http://localhost:8000/docs
 
@@ -39,57 +37,25 @@ Open UI at http://localhost:8501 and API docs at http://localhost:8000/docs
 - Ensure venv Python is 3.11 and `pydantic-settings` is installed
 - Encryption errors: set `APP_SECRET_KEY` and `APP_KDF_SALT` in `.env`
 
-## Quickstart
 
-1. **Prerequisites**: Python 3.11+
-2. **Clone repo**: `git clone <repo-url>`
-3. **Create virtual environment**:
-   ```
-   python -m venv .venv
-   ```
-4. **Activate venv**:
-   ```
-   source .venv/bin/activate  # Windows: .venv\Scripts\activate
-   ```
-5. **Install dependencies**:
-   ```
-   pip install -r requirements.txt
-   pip install -r requirements-dev.txt
-   ```
-6. **Setup configuration**:
-   - Copy `.env.example` to `.env`
-   - Fill in your Plaid credentials (get from Plaid dashboard, use sandbox for dev)
-7. **Run the app**:
-   ```
-   streamlit run src/budget_tracker/app/home.py
-   ```
-8. **Optional: Run backend for Plaid**:
-   ```
-   uvicorn budget_tracker.api.main:app --reload --port 8000
-   ```
-
-Open [http://localhost:8501](http://localhost:8501) in your browser.
 
 ## Configuration
 
 Copy `.env.example` to `.env` and set:
 
-- `DATABASE_URL`: Path to SQLite db (e.g., `sqlite:///./budget_tracker.db`)
-- `APP_SECRET_KEY`: Random string for encrypting Plaid tokens (generate via `openssl rand -hex 32`)
-- `PLAID_CLIENT_ID`: Your Plaid client ID
-- `PLAID_SECRET`: Your Plaid secret
-- `PLAID_ENV`: `sandbox` (recommended for dev), `development`, or `production`
-- Other Plaid options as needed
+- `DATABASE_URL`: SQLite path (e.g., `sqlite:///./budget_tracker.db`)
+- `APP_SECRET_KEY`: Strong secret (e.g., `openssl rand -hex 32`)
+- `APP_KDF_SALT`: Random salt string (arbitrary text, not base64)
+- `PLAID_CLIENT_ID` / `PLAID_SECRET`: Plaid credentials (use sandbox)
+- `PLAID_ENV`: `sandbox` for development
+- `PLAID_WEBHOOK_URL`: Typically `http://localhost:8000/plaid/webhook`
 
 ## Development Workflow
 
-- **Install pre-commit**: `pre-commit install`
-- **Run tests**: `pytest`
-- **Check linting**: `ruff check .`
-- **Format code**: `black .`
-- **Type check**: `mypy src/`
+- Makefile (recommended): `make setup` • `make api` • `make ui` • `make lint` • `make typecheck` • `make test` • `make precommit`
+- Manual: `ruff check --fix . && ruff format .` • `mypy .` • `pytest -q`
 
-Code quality gates: 85%+ test coverage for logic modules, no failing pre-commit or ruff/black checks.
+Quality gates: ruff/mypy clean; tests green.
 
 ## Roadmap
 
